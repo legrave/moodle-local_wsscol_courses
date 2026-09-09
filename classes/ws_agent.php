@@ -36,9 +36,11 @@ require_once($CFG->libdir . '/filelib.php');
  * REST enrol_wsscol ws_agent client
  */
 abstract class ws_agent {
+    protected $wsid;
     protected $wshost = '';
     protected $wsuser = '';
     protected $wspassword = '';
+    protected $wsuri = '';
 
     /**
      * @param int $wsid
@@ -58,7 +60,6 @@ abstract class ws_agent {
      * getfromws : get data from ws_agent
      *
      * @param string $uri
-     * @param string $search
      * @return mixed the return of json_decode
      * @throws exception
      */

@@ -62,9 +62,9 @@ class wsedit_form extends moodleform {
         $mform->setType('wspassword', PARAM_NOTAGS);
         $mform->addRule('wspassword', null, 'maxlength', 128);
 
-        $mform->addElement('textarea', 'uri', 'uri', array('wrap' => 'virtual','rows'=>'5','cols'=>'100'));
-        $mform->setType('uri', PARAM_RAW_TRIMMED);
-        $mform->addRule('uri', null, 'required');
+        $mform->addElement('textarea', 'wsuri', 'wsuri', array('wrap' => 'virtual','rows'=>'5','cols'=>'100'));
+        $mform->setType('wsuri', PARAM_RAW_TRIMMED);
+        $mform->addRule('wsuri', null, 'required');
 
         $mform->addElement('header', 'config_header', get_string('config_header', 'local_wsscol_courses'));
         $mform->setExpanded('config_header');
@@ -114,9 +114,9 @@ class wsedit_form extends moodleform {
         $mform->getElement('roles')->setMultiple(true);
         $mform->getElement('roles')->setSelected($defaultrole);
 
-        $mform->addElement('text', 'idnumber_suffix', 'idnumber_suffix', array('size' => '16'));
+        $mform->addElement('text', 'idnumber_suffix', 'idnumber_suffix', array('size' => '64'));
         $mform->setType('idnumber_suffix', PARAM_NOTAGS);
-        $mform->addRule('idnumber_suffix', null, 'maxlength', 16);
+        $mform->addRule('idnumber_suffix', null, 'maxlength', 64);
 
         $mform->addElement('advcheckbox', 'status', get_string('active'));
         $mform->setDefault('status', 1);
@@ -124,26 +124,26 @@ class wsedit_form extends moodleform {
         $mform->addElement('header', 'mapping_header', get_string('mapping_header', 'local_wsscol_courses'));
         $mform->setExpanded('mapping_header');
 
-        $mform->addElement('text', 'path', 'path', array('size' => '16'));
+        $mform->addElement('text', 'path', 'path', array('size' => '64'));
         $mform->setType('path', PARAM_NOTAGS);
-        $mform->addRule('path', null, 'maxlength', 16);
+        $mform->addRule('path', null, 'maxlength', 64);
 
         $mform->addElement('html', get_string('mapping_description', 'local_wsscol_courses'));
 
-        $mform->addElement('text', 'libelle', 'libelle', array('size' => '16'));
-        $mform->setType('libelle', PARAM_NOTAGS);
-        $mform->addRule('libelle', null, 'maxlength', 16);
+        $mform->addElement('text', 'form_label', 'form_label', array('size' => '64'));
+        $mform->setType('form_label', PARAM_NOTAGS);
+        $mform->addRule('form_label', null, 'maxlength', 64);
 
-        $mform->addElement('text', 'template', 'template', array('size' => '16'));
+        $mform->addElement('text', 'template', 'template', array('size' => '64'));
         $mform->setType('template', PARAM_NOTAGS);
-        $mform->addRule('template', null, 'maxlength', 16);
+        $mform->addRule('template', null, 'maxlength', 64);
 
-        $mform->addElement('text', 'longname', 'longname', array('size' => '48'));
+        $mform->addElement('text', 'longname', 'longname', array('size' => '64'));
         $mform->setType('longname', PARAM_NOTAGS);
         $mform->addRule('longname', null, 'maxlength', 255);
-        $mform->setDefault('longname', '[code1] - [code2] - [libelle] ([firstname] [lastname] 2023-24)');
+        $mform->setDefault('longname', '[libelle] ([firstname] [lastname] 2023-24)');
 
-        $mform->addElement('text', 'shortname', 'shortname', array('size' => '48'));
+        $mform->addElement('text', 'shortname', 'shortname', array('size' => '64'));
         $mform->setType('shortname', PARAM_NOTAGS);
         $mform->addRule('shortname', null, 'maxlength', 255);
         $mform->setDefault('shortname', '[code1]-[code2]-([firstname]-[lastname])-2023');
@@ -240,7 +240,7 @@ if ($mform->is_cancelled()) {
     $record->wshost = $data->wshost;
     $record->wsuser = $data->wsuser;
     $record->wspassword = $data->wspassword;
-    $record->uri = $data->uri;
+    $record->wsuri = $data->wsuri;
     $record->status = intval($data->status);
     $record->config = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);*/
 

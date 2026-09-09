@@ -35,9 +35,11 @@ class idnumber_info {
     /**
      * Constructor.
      *
-     * @param string $name
-     * @param string $code
      * @param int $wsid
+     * @param string $code
+     * @param string $username
+     * @param string $suffix
+     * @param string $separator
      */
     public function __construct(int $wsid, string $code, string $username, string $suffix, string $separator) {
         $this->username = $username;

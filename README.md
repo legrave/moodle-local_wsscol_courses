@@ -44,12 +44,11 @@ Admin Settings
 * wsuser : the user for webservice authentification
 * wspassword : the password for webservice authentification
 * wshost : webservice base url
-* uri : webservice uri (you can utilized \[search\] which will be replaced by username)
+* wsuri : webservice wsuri (you can utilized \[search\] which will be replaced by username)
 
 ### Mapping 
 each of this attributes are the map field return by the web service
 * template : (Optional) autocreated courses can copy their settings from a template course
-* libelle : attribut to determine the name of the course
 
 ### Enrols
 You can specified enrol methods from enrol/wsscol to add to courses (none if you don't use enrol/wsscol). You can add multiple enrol/wsscol methods. For each of them, you can specify :

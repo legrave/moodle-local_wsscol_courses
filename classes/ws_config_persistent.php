@@ -37,11 +37,9 @@ class ws_config_persistent {
     /** @var string Web service password. */
     public $wspassword = '';
     /** @var string Web service URI. */
-    public $uri = '';
+    public $wsuri = '';
     /** @var int Configuration status. */
     public $status = 0;
-    /** @var string Course label mapping. */
-    public $libelle = '';
     /** @var string|array Course category mapping. */
     public $path = '';
     /** @var string Course template mapping. */
@@ -50,6 +48,8 @@ class ws_config_persistent {
     public $longname = '';
     /** @var string Built course short name. */
     public $shortname = '';
+    /** @var string which label to display. */
+    public $form_label = '';
     /** @var string Local username setting. */
     public $local_username = '';
     /** @var int Moodle category ID. */
@@ -77,18 +77,18 @@ class ws_config_persistent {
         $ws_config->wshost = $record->wshost ?? '';
         $ws_config->wsuser = $record->wsuser ?? '';
         $ws_config->wspassword = $record->wspassword ?? '';
-        $ws_config->uri = $record->uri ?? '';
+        $ws_config->wsuri = $record->wsuri ?? '';
         $ws_config->status = (int)($record->status ?? 0);
 
         // JSON configuration.
         $config = self::decode_config($record->config ?? null);
 
         $mappedfields = $config['mapped_fields'] ?? [];
-        $ws_config->libelle = $mappedfields['libelle'] ?? '';
         $ws_config->path = $mappedfields['path'] ?? '';
         $ws_config->template = $mappedfields['template'] ?? '';
         $ws_config->longname = $mappedfields['longname'] ?? '';
         $ws_config->shortname = $mappedfields['shortname'] ?? '';
+        $ws_config->form_label = $mappedfields['form_label'] ?? '';
 
         $settings = $config['settings'] ?? [];
         $ws_config->local_username = $settings['local_username'] ?? '';
@@ -114,13 +114,13 @@ class ws_config_persistent {
         $data->wshost = $this->wshost;
         $data->wsuser = $this->wsuser;
         $data->wspassword = $this->wspassword;
-        $data->uri = $this->uri;
+        $data->wsuri = $this->wsuri;
         $data->status =
             $this->status;
         // Mapped fields.
-        $data->libelle = $this->libelle;
         $data->path = $this->path;
         $data->template = $this->template;
+        $data->form_label = $this->form_label;
         // Built fields.
         $data->longname = $this->longname;
         $data->shortname = $this->shortname;
@@ -160,15 +160,15 @@ class ws_config_persistent {
         $model->wshost = $data->wshost ?? '';
         $model->wsuser = $data->wsuser ?? '';
         $model->wspassword = $data->wspassword ?? '';
-        $model->uri = $data->uri ?? '';
+        $model->wsuri = $data->wsuri ?? '';
         $model->status = (int)($data->status ?? 0);
 
         // Mapped fields.
-        $model->libelle = $data->libelle ?? '';
         $model->path = $data->path ?? '';
         $model->template = $data->template ?? '';
         $model->longname = $data->longname ?? '';
         $model->shortname = $data->shortname ?? '';
+        $model->form_label = $data->form_label ?? '';
 
         // Settings.
         $model->local_username = $data->local_username ?? '';
@@ -213,11 +213,11 @@ class ws_config_persistent {
     function get_mapped_fields(): array
     {
         return [
-            'libelle' => $this->libelle,
             'path' => $this->path,
             'template' => $this->template,
             'longname' => $this->longname,
             'shortname' => $this->shortname,
+            'form_label' => $this->form_label,
         ];
     }
 
@@ -283,7 +283,7 @@ class ws_config_persistent {
         $record->wshost = $this->wshost;
         $record->wsuser = $this->wsuser;
         $record->wspassword = $this->wspassword;
-        $record->uri = $this->uri;
+        $record->wsuri = $this->wsuri;
         $record->status = $this->status;
         $record->config = json_encode($this->get_json_config());
 

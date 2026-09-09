@@ -78,8 +78,8 @@ $string['ws_local_uid'] = 'User id field ';
 $string['ws_local_uid_desc'] = 'User field to ask to ws_agent';
 $string['ws_url'] = 'ws_agent enrol url';
 $string['ws_url_desc'] = 'url of ws_agent giving course enrolment';
-$string['ws_coursesteacher_uri'] = 'courses list uri';
-$string['ws_coursesteacher_uri_desc'] = 'uri that get all courses of a teacher';
+$string['ws_coursesteacher_uri'] = 'courses list wsuri';
+$string['ws_coursesteacher_uri_desc'] = 'wsuri that get all courses of a teacher';
 
 $string['ws_coursesteacher_code1'] = 'first attribute to set the course code';
 $string['ws_coursesteacher_code1_desc'] = 'example : the code itself';

@@ -43,7 +43,6 @@ function xmldb_local_wsscol_courses_upgrade($oldversion) {
             // Migrate the old course configuration.
             $course->shortname = $record->ws_coursesteacher_code1;
             $course->path = $record->ws_coursesteacher_parent;
-            $course->libelle = $record->ws_coursesteacher_libelle;
             $course->local_id = $record->ws_local_id;
             $course->rootcat_id = $record->catid;
             $course->roles = json_decode($record->roles, true);

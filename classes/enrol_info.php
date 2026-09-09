@@ -27,8 +27,8 @@ class enrol_info {
     /**
      * Constructor.
      *
-     * @param string $code
-     * @param int $wsid
+     * @param int $enrol_wsid
+     * @param array $enrol_code
      */
     public function __construct(int $enrol_wsid, array $enrol_code = []) {
         if ($enrol_code) {

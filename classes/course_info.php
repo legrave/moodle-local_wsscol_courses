@@ -21,6 +21,8 @@ class course_info {
     public $fullname = '';
     /** @var string Short name pattern of the course to create. */
     public $shortname = '';
+    /** @var string which label to display. */
+    public $form_label = '';
     /** @var string username. */
     public $username = '';
     /** @var idnumber_info Idnumber. */
@@ -50,7 +52,7 @@ class course_info {
         $instance->template = '';
 
 
-        $ws_config_record = $DB->get_record('local_wsscol_courses_ws_config', ['id'=>$instance->idnumber_info->wsid]);
+        $ws_config_record = $DB->get_record('local_wsscol_courses_ws_config', ['wsid'=>$instance->idnumber_info->wsid]);
         $ws_config = ws_config_persistent::from_record($ws_config_record);
 
         if (isset($ws_config->rootcat_id)) {

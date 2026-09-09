@@ -45,13 +45,13 @@ list($options, $unrecognized) = cli_get_params(
     [
         'verbose' => false,
         'help'    => false,
-        'id'      => 0,
+        'wsid'      => 0,
         'search'  => '',
     ],
     [
         'v' => 'verbose',
         'h' => 'help',
-        'w' => 'id',
+        'w' => 'wsid',
         's' => 'search',
     ]
 );
@@ -93,18 +93,18 @@ if (empty($options['verbose'])) {
 }
 
 // Validate id explicitly: 0 or non-numeric is not acceptable.
-$id = (int) $options['id'];
-if ($id <= 0) {
-    cli_error('id is required and must be a positive integer (use -w=ID)', 2);
+$wsid = (int) $options['wsid'];
+if ($wsid <= 0) {
+    cli_error('wsid is required and must be a positive integer (use -w=ID)', 2);
 }
 
 // Normalise search: always a trimmed string, never a boolean.
 $search = trim((string) $options['search']);
 
 if ($search !== '') {
-    $result = local_wsscol_courses_sync_methodenrol($id, $trace, $search);
+    $result = local_wsscol_courses_sync_methodenrol($wsid, $trace, $search);
 } else {
-    $result = local_wsscol_courses_sync_methodenrol($id, $trace);
+    $result = local_wsscol_courses_sync_methodenrol($wsid, $trace);
 }
 //$plugin->send_expiry_notifications($trace);
 

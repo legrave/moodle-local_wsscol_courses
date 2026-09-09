@@ -6,12 +6,12 @@
   <TABLES>
     <TABLE NAME="local_wsscol_courses_ws_config" COMMENT="Store webservices for local_wsscol_courses">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="wsid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="wsname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="wshost" TYPE="char" LENGTH="253" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="wsuser" TYPE="char" LENGTH="128" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="wspassword" TYPE="char" LENGTH="128" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="uri" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="wsuri" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="config" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>

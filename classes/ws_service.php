@@ -32,24 +32,9 @@ defined('MOODLE_INTERNAL') || die();
 class ws_service extends ws_agent {
     /** @var self[] */
     private static $instance = [];
-    /** @var int */
-    private $id;
     /** @var string */
     private $wsname = '';
     /** @var array */
-    private $enrols = [];
-    /** @var string */
-    private $uri = '';
-    /** @var string */
-    private $local_username = '';
-    /** @var array */
-    private $path = null;
-    /** @var string */
-    private $template = null;
-    /** @var string */
-    private $longname = '';
-    /** @var string */
-    private $shortname = '';
 
     /**
      * @return string
@@ -62,9 +47,9 @@ class ws_service extends ws_agent {
     /**
      * @return int
      */
-    public function get_id(): int
+    public function get_wsid(): int
     {
-        return $this->id;
+        return $this->wsid;
     }
 
     /**
@@ -73,77 +58,39 @@ class ws_service extends ws_agent {
      * @param int $wsid
      * @throws dml_exception
      */
-    protected function __construct(int $wsid) {
+    protected function __construct(int $wsid)
+    {
         global $DB;
 
-        $this->id = $wsid;
+        $this->wsid = $wsid;
 
-        $record = $DB->get_record('local_wsscol_courses_ws_config', ['id' => $wsid]);
+        $record = $DB->get_record('local_wsscol_courses_ws_config', ['wsid' => $wsid]);
         $ws_config = \local_wsscol_courses\ws_config_persistent::from_record($record);
         $ws_record_flatten = $ws_config->to_form_data();
 
         if (!$ws_record_flatten) {
-            throw new \Exception('No ws_service with id ' . $wsid);
+            throw new \Exception('No ws_service with wsid ' . $wsid);
         }
 
         if (empty($ws_record_flatten->wsname)) {
-            throw new \Exception('No name for ws_service with id ' . $wsid);
+            throw new \Exception('No name for ws_service with wsid ' . $wsid);
         }
         $this->wsname = $ws_record_flatten->wsname;
 
         if (empty($ws_record_flatten->wshost)) {
-            throw new \Exception('No wshost for ws_service with id ' . $wsid);
+            throw new \Exception('No wshost for ws_service with wsid ' . $wsid);
         }
         $this->wshost = $ws_record_flatten->wshost;
 
         $this->wsuser = $ws_record_flatten->wsuser ?? null;
         $this->wspassword = $ws_record_flatten->wspassword ?? null;
 
-        if (empty($ws_record_flatten->local_username)) {
-            throw new \Exception('No local_username field ' . $wsid);
-        }
-        $this->local_username = $ws_record_flatten->local_username;
-
-        $enrols = local_wsscol_courses_get_repeated_elements(
-            $ws_record_flatten,
-            enrol_info::get_attribute_names()
-        );
-
-        foreach ($enrols as $enrol) {
-            if (empty($enrol->enrol_wsid)) {
-                throw new \Exception(
-                    'No enrol_wsid for ws_service with id ' . $wsid
-                );
-            }
-            $enrol_array = array();
-            $enrol_array['enrol_wsid'] = $enrol->enrol_wsid;
-            $enrol_array['enrol_code'] = $enrol->enrol_code;
-            $this->enrols[] = $enrol_array;
-        }
-
-        if (empty($ws_record_flatten->uri)) {
+        if (empty($ws_record_flatten->wsuri)) {
             throw new \Exception(
-                'No uri for ws_service with id ' . $wsid
+                'No uri for ws_service with wsid ' . $wsid
             );
         }
-        $this->uri = $ws_record_flatten->uri;
-
-        $this->path = $ws_record_flatten->path ?? null;
-
-        $this->template = $ws_record_flatten->template ?? null;
-        if (empty($ws_record_flatten->longname)) {
-            throw new \Exception(
-                'No longname for ws_service with id ' . $wsid
-            );
-        }
-        $this->longname = $ws_record_flatten->longname;
-
-        if (empty($ws_record_flatten->shortname)) {
-            throw new \Exception(
-                'No shortname for ws_service with id ' . $wsid
-            );
-        }
-        $this->shortname = $ws_record_flatten->shortname;
+        $this->wsuri = $ws_record_flatten->wsuri;
     }
 
     /**
@@ -169,17 +116,22 @@ class ws_service extends ws_agent {
      *
      * The web service must return one record for each Moodle course.
      *
-     * @param string $search Teacher login.
+     * @param int $userid Teacher userid.
      * @return course_info[]
      */
     public function get_courses_teacher($userid) {
         global $DB;
-        $usernamefield = $this->local_username;
+
+        // First, we get wsid settings from database
+        $record = $DB->get_record('local_wsscol_courses_ws_config', ['wsid' => $this->wsid]);
+        $ws_config = ws_config_persistent::from_record($record);
+
+        $usernamefield = $ws_config->local_username;
         $user = \core_user::get_user($userid);
         $search = $user->$usernamefield;
         $username = $user->username;
 
-        if (!$this->uri) {
+        if (!$this->wsuri) {
             return false;
         }
 
@@ -189,14 +141,7 @@ class ws_service extends ws_agent {
         // Build the URI using the teacher login.
         // TODO: Allow querying the web service via POST if [search]
         // is not specified in the configured URL.
-        $uri = preg_replace($pattern, $replacement, $this->uri);
-
-        // web get some settings from ws_agent database settings
-        $record = $DB->get_record('local_wsscol_courses_ws_config', ['id' => $this->id]);
-        //$ws_record = wsscol_flatten_record($record);
-
-        $ws_config = ws_config_persistent::from_record($record);
-        $ws_record_flatten = $ws_config->to_form_data();
+        $uri = preg_replace($pattern, $replacement, $this->wsuri);
 
         // we get the course data from ws_agent
         $courses_teacher = $this->getfromws($uri);
@@ -206,7 +151,8 @@ class ws_service extends ws_agent {
         foreach ($courses_teacher as $course_teacher) {
             $course = new course_info();
             $course->enrols = [];
-            foreach ($this->enrols as $key => $enrol) {
+
+            foreach ($ws_config->enrols as $key => $enrol) {
                 $course->enrols[$key] = new enrol_info(
                     $enrol['enrol_wsid']
                 );
@@ -220,27 +166,27 @@ class ws_service extends ws_agent {
                     $course->enrols[$key]->add_enrol_code($course_teacher[$enrol['enrol_code']]);
                 }
             }
-            if ($course_teacher[$this->path]) {
-                if(is_array($course_teacher[$this->path])) {
-                    $course->path = $course_teacher[$this->path];
+            if ($course_teacher[$ws_config->path]) {
+                if(is_array($course_teacher[$ws_config->path])) {
+                    $course->path = $course_teacher[$ws_config->path];
                 } else {
                     $course->path = array();
-                    $course->path[] = $course_teacher[$this->path];
+                    $course->path[] = $course_teacher[$ws_config->path];
                 }
             } else {
                 $course->path = null;
             }
 
-            $course->rootcat_id = $ws_record_flatten->rootcat_id;
-            $course->roles = $ws_record_flatten->roles;
+            $course->rootcat_id = $ws_config->rootcat_id;
+            $course->roles = $ws_config->roles;
 
             $separator = get_config('local_wsscol_courses', 'idnumber_seperator');
-            $suffix = $this->idnumber_suffix ?? '';
+            $suffix = $ws_config->idnumber_suffix ?? '';
 
             $course->username = $username;
 
             $searchfields = ['[firstname]', '[lastname]', '[username]'];
-            $replace = [$username, $username, $username];
+            $replace = [$user->firstname, $user->lastname, $username];
             foreach ($course_teacher as $attr => $value) {
                 $searchfields[] = '[' . $attr . ']';
                 if (is_array($value)) {
@@ -248,36 +194,45 @@ class ws_service extends ws_agent {
                 }
                 $replace[] = $value;
             }
+            $course->form_label = str_replace(
+                $searchfields,
+                $replace,
+                $ws_config->form_label
+            );
 
             $course->template = str_replace(
                 $searchfields,
                 $replace,
-                $this->template
+                $ws_config->template
             );
 
             $course->fullname = str_replace(
                 $searchfields,
                 $replace,
-                $this->longname
+                $ws_config->longname
             );
 
             $course->shortname = str_replace(
                 $searchfields,
                 $replace,
-                $this->shortname
+                $ws_config->shortname
             );
-            $idnumber_info = new idnumber_info($this->id,$course->shortname,$username,$suffix,$separator);
+            $idnumber_info = new idnumber_info($this->wsid,$course->shortname,$username,$suffix,$separator);
 
             $course->idnumber_info = $idnumber_info;
 
-            $course->wsid = $this->id;
+            $course->wsid = $this->wsid;
             $courses[$idnumber_info->to_idnumber()] = $course;
         }
         return $courses;
     }
     public function get_idnumber() {
+        // web get some settings from ws_agent database settings
+        $record = $DB->get_record('local_wsscol_courses_ws_config', ['wsid' => $this->wsid]);
+        $ws_config = ws_config_persistent::from_record($record);
+
         $separator = get_config('local_wsscol_courses', 'idnumber_seperator');
-        $suffix = $this->idnumber_suffix ?? '';
-        $this->idnumber = 'wsscol_'.$this->wsid . $separator . $this->shortname . $separator . $this->username . $separator . $suffix;
+        $suffix = $ws_config->idnumber_suffix ?? '';
+        $this->idnumber = 'wsscol_'.$this->wsid . $separator . $ws_config->shortname . $separator . $ws_config->username . $separator . $suffix;
     }
 }

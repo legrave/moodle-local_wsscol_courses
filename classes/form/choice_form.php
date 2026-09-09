@@ -28,7 +28,7 @@ class choice_form extends \moodleform {
         global $USER;
         $wsids = $DB->get_fieldset_select(
             'local_wsscol_courses_ws_config',
-            'id',
+            'wsid',
             'config IS NOT NULL AND config <> :empty AND status = :status',
             [
                 'empty' => '',
@@ -42,20 +42,20 @@ class choice_form extends \moodleform {
             $mform->addElement('header',$ws_service->get_wsname(),$ws_service->get_wsname());
             //$content .= ($result) ? html_writer::tag('h2',$result->name) : '';
         }
-        $courses =$ws_service->get_courses_teacher($USER->id);
-        if ($courses) {
-            foreach ($courses as $course) {
-                $idnumber = $course->idnumber_info->to_idnumber();
+        $courses_info =$ws_service->get_courses_teacher($USER->id);
+        if ($courses_info) {
+            foreach ($courses_info as $course_info) {
+                $idnumber = $course_info->idnumber_info->to_idnumber();
                 $search = $DB->get_record('course', array('idnumber' => $idnumber));
                 if (empty($search)) {
                     $check = true;
-                    $leftlabel = $course->fullname." (".$course->shortname .")";
+                    $leftlabel = $course_info->form_label;
                     $mform->addElement('advcheckbox',
-                        'courses['.$ws_service->get_id().'][' . $course->shortname . ']', // Name.
+                        'courses['.$ws_service->get_wsid().'][' . $course_info->shortname . ']', // Name.
                         $leftlabel,  // Left label.
                         '', // Right label.
                         [], // Attributes.
-                        array(false, serialize($course)));
+                        array(false, serialize($course_info)));
                 }
             }
         }
