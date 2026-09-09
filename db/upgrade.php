@@ -27,7 +27,7 @@ function xmldb_local_wsscol_courses_upgrade($oldversion) {
     global $CFG, $DB;
     $dbman = $DB->get_manager();
     if ($oldversion < 2026090200) {
-        $records = $DB->get_records('local_wsscol_courses_ws');
+        $records = $DB->get_records('local_wsscol_courses_ws_config');
 
         foreach ($records as $record) {
             $course = new \local_wsscol_courses\ws_config_persistent();
@@ -63,7 +63,7 @@ function xmldb_local_wsscol_courses_upgrade($oldversion) {
             // Generate the new record, including the JSON configuration.
             $newrecord = $course->to_record();
 
-            $DB->update_record('local_wsscol_courses_ws', $newrecord);
+            $DB->update_record('local_wsscol_courses_ws_config', $newrecord);
         }
 
         upgrade_block_savepoint(true, 2026090200, 'wsscol');

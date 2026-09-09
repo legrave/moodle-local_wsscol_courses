@@ -216,7 +216,7 @@ $PAGE->set_pagelayout('admin');
 $mappingcount = 0;
 if ($wsid) {
     $isadding = false;
-    $wsrecord_db = $DB->get_record('local_wsscol_courses_ws', array('id' => $wsid), '*', MUST_EXIST);
+    $wsrecord_db = $DB->get_record('local_wsscol_courses_ws_config', array('id' => $wsid), '*', MUST_EXIST);
     //$wsrecord = wsscol_flatten_record($wsrecord);
     $wsrecord_db = \local_wsscol_courses\ws_config_persistent::from_record($wsrecord_db);
     $wsrecord = $wsrecord_db->to_form_data();
@@ -245,10 +245,10 @@ if ($mform->is_cancelled()) {
     $record->config = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);*/
 
     if ($isadding) {
-        $DB->insert_record('local_wsscol_courses_ws', $course_model->to_record());
+        $DB->insert_record('local_wsscol_courses_ws_config', $course_model->to_record());
     } else {
         $course_model->id = $wsid;
-        $DB->update_record('local_wsscol_courses_ws', $course_model->to_record());
+        $DB->update_record('local_wsscol_courses_ws_config', $course_model->to_record());
     }
     redirect($managewsurl);
 } else {

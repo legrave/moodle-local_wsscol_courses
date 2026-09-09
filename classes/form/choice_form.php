@@ -27,7 +27,7 @@ class choice_form extends \moodleform {
         global $DB;
         global $USER;
         $wsids = $DB->get_fieldset_select(
-            'local_wsscol_courses_ws',
+            'local_wsscol_courses_ws_config',
             'id',
             'config IS NOT NULL AND config <> :empty AND status = :status',
             [

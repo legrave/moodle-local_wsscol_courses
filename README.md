@@ -38,7 +38,7 @@ Admin Settings
 * shortname : Pattern for course shortname
 * idnumber_seperator : the séparator use to the pattern of idnumber (slash bu default - to change if slash is use in your group code)
 
-### Webservices (save in db local_wsscol_courses_ws)
+### Webservices (save in db local_wsscol_courses_ws_config)
 
 * wsname : the name of the webservice
 * wsuser : the user for webservice authentification

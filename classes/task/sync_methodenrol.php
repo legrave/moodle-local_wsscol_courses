@@ -54,7 +54,7 @@ class sync_methodenrol extends scheduled_task {
             return;
         }
         $trace->output('Processing sync wsscol enrolment method');
-        $wsapps = $DB->get_records('local_wsscol_courses_ws',array('status'=>TRUE ));
+        $wsapps = $DB->get_records('local_wsscol_courses_ws_config',array('status'=>TRUE ));
         foreach ($wsapps as $wsapp) {
             local_wsscol_courses_sync_methodenrol($wsapp->id, $trace);
         }

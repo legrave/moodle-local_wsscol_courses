@@ -56,7 +56,7 @@ function local_wsscol_courses_get_all_courses($search) {
 function local_wsscol_courses_sync_methodenrol(int $wsid, progress_trace $trace, $search = NULL) {
     global $DB;
 
-    $ws_record = $DB->get_record('local_wsscol_courses_ws', array('id' => $wsid), '*', MUST_EXIST);
+    $ws_record = $DB->get_record('local_wsscol_courses_ws_config', array('id' => $wsid), '*', MUST_EXIST);
     $trace->output('Gogogo');
     $ws_config = \local_wsscol_courses\ws_config_persistent::from_record($ws_record);
     $enrol_wsscol = enrol_get_plugin('wsscol');

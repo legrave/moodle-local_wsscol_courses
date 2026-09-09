@@ -40,7 +40,7 @@ $editwsurl = new moodle_url('/local/wsscol_courses/wsedit.php');
 
 $pluginurl = new moodle_url('/admin/settings.php', array('section' => 'ettingwsscol'));
 $download = optional_param('download', '', PARAM_ALPHA);
-$records_course_ws = $DB->get_records('local_wsscol_courses_ws');
+$records_course_ws = $DB->get_records('local_wsscol_courses_ws_config');
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url($managewsurl);
@@ -60,17 +60,17 @@ if ($action and confirm_sesskey() and $wsid) {
    $ws_service_object->id = intval($wsid);
     switch ($action) {
         case 'delete':
-            $DB->delete_records('local_wsscol_courses_ws', array('id' => $wsid));
+            $DB->delete_records('local_wsscol_courses_ws_config', array('id' => $wsid));
             redirect($PAGE->url, get_string('wsappdeleted', 'local_wsscol_courses'));
             break;
         case 'enable':
            $ws_service_object->status = 1;
-            $DB->update_record('local_wsscol_courses_ws',$ws_service_object);
+            $DB->update_record('local_wsscol_courses_ws_config',$ws_service_object);
             redirect($PAGE->url, get_string('wsappenable', 'local_wsscol_courses'));
             break;
         case 'disable':
            $ws_service_object->status = 0;
-            $DB->update_record('local_wsscol_courses_ws',$ws_service_object);
+            $DB->update_record('local_wsscol_courses_ws_config',$ws_service_object);
             redirect($PAGE->url, get_string('wsappdisable', 'local_wsscol_courses'));
             break;
     }

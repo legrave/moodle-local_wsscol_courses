@@ -56,7 +56,7 @@ if ($datas = $mform->get_data()) {
 
     $allcourses = $datas->courses;
     foreach ($allcourses as $key => $courses) {
-        $result = $DB->get_record('local_wsscol_courses_ws',array('id'=>$key),'wsname');
+        $result = $DB->get_record('local_wsscol_courses_ws_config',array('id'=>$key),'wsname');
         $content .= ($result) ? html_writer::tag('h2',$result->wsname) : '';
 
         foreach ($courses as $key => $value) {

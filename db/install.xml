@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_wsscol_courses_ws" COMMENT="Store webservices for local_wsscol_courses">
+    <TABLE NAME="local_wsscol_courses_ws_config" COMMENT="Store webservices for local_wsscol_courses">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="wsname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>

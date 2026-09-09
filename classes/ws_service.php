@@ -78,7 +78,7 @@ class ws_service extends ws_agent {
 
         $this->id = $wsid;
 
-        $record = $DB->get_record('local_wsscol_courses_ws', ['id' => $wsid]);
+        $record = $DB->get_record('local_wsscol_courses_ws_config', ['id' => $wsid]);
         $ws_config = \local_wsscol_courses\ws_config_persistent::from_record($record);
         $ws_record_flatten = $ws_config->to_form_data();
 
@@ -192,7 +192,7 @@ class ws_service extends ws_agent {
         $uri = preg_replace($pattern, $replacement, $this->uri);
 
         // web get some settings from ws_agent database settings
-        $record = $DB->get_record('local_wsscol_courses_ws', ['id' => $this->id]);
+        $record = $DB->get_record('local_wsscol_courses_ws_config', ['id' => $this->id]);
         //$ws_record = wsscol_flatten_record($record);
 
         $ws_config = ws_config_persistent::from_record($record);
